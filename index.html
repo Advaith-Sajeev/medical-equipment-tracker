@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Medical Equipment Rental Tracker</title>
+    <link rel="stylesheet" href="styles.css" />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <!-- Login Section -->
+    <div id="login-container" class="login-container">
+      <div class="login-box">
+        <div class="login-header">
+          <i class="fas fa-heartbeat"></i>
+          <h2>Medical Equipment Rental Tracker</h2>
+          <p>Please login to continue</p>
+          <div class="security-notice">
+            ⚠️ <strong>DEMO ONLY</strong> - Not for production use with real data
+          </div>
+        </div>
+        <form id="login-form" class="login-form">
+          <div class="form-group">
+            <label for="username">
+              <i class="fas fa-user"></i>
+              Username
+            </label>
+            <input 
+              type="text" 
+              id="username" 
+              name="username" 
+              required 
+              autocomplete="username"
+            />
+          </div>
+          <div class="form-group">
+            <label for="password">
+              <i class="fas fa-lock"></i>
+              Password
+            </label>
+            <input 
+              type="password" 
+              id="password" 
+              name="password" 
+              required 
+              autocomplete="current-password"
+            />
+          </div>
+          <button type="submit" class="login-btn">
+            <i class="fas fa-sign-in-alt"></i>
+            Login
+          </button>
+          <div id="login-error" class="error-message" style="display: none;">
+            Invalid username or password. Please try again.
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Main Application (initially hidden) -->
+    <div id="main-app" class="container" style="display: none;">
+      <header>
+        <div class="header-content">
+          <div class="header-title">
+            <h1>
+              <i class="fas fa-heartbeat"></i> Medical Equipment Rental Tracker
+            </h1>
+            <p>Track your Oxygen Concentrators, BiPAP, and CPAP units</p>
+          </div>
+          <button id="logout-btn" class="logout-btn">
+            <i class="fas fa-sign-out-alt"></i>
+            Logout
+          </button>
+        </div>
+      </header>
+
+      <nav class="main-nav">
+        <button class="nav-btn active" data-section="dashboard">
+          <i class="fas fa-chart-dashboard"></i> Dashboard
+        </button>
+        <button class="nav-btn" data-section="add-rental">
+          <i class="fas fa-plus"></i> Add Rental
+        </button>
+        <button class="nav-btn" data-section="manage-rentals">
+          <i class="fas fa-list"></i> Manage Rentals
+        </button>
+        <button class="nav-btn" data-section="reports">
+          <i class="fas fa-chart-bar"></i> Reports
+        </button>
+      </nav>
+
+      <main>
+        <!-- Dashboard Section -->
+        <section id="dashboard" class="content-section active">
+          <div class="dashboard-grid">
+            <div class="stat-card">
+              <div class="stat-icon oxygen">
+                <i class="fas fa-lungs"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Oxygen Concentrators</h3>
+                <div class="stat-numbers">
+                  <span class="total" id="oxygen-total">0</span> Total |
+                  <span class="rented" id="oxygen-rented">0</span> Rented |
+                  <span class="free" id="oxygen-free">0</span> Free
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon bipap">
+                <i class="fas fa-wind"></i>
+              </div>
+              <div class="stat-info">
+                <h3>BiPAP Units</h3>
+                <div class="stat-numbers">
+                  <span class="total" id="bipap-total">0</span> Total |
+                  <span class="rented" id="bipap-rented">0</span> Rented |
+                  <span class="free" id="bipap-free">0</span> Free
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card">
+              <div class="stat-icon cpap">
+                <i class="fas fa-mask-face"></i>
+              </div>
+              <div class="stat-info">
+                <h3>CPAP Units</h3>
+                <div class="stat-numbers">
+                  <span class="total" id="cpap-total">0</span> Total |
+                  <span class="rented" id="cpap-rented">0</span> Rented |
+                  <span class="free" id="cpap-free">0</span> Free
+                </div>
+              </div>
+            </div>
+
+            <div class="stat-card financial">
+              <div class="stat-icon">
+                <i class="fas fa-dollar-sign"></i>
+              </div>
+              <div class="stat-info">
+                <h3>Financial Summary</h3>
+                <div class="financial-details">
+                  <div>
+                    Total Collected: $<span id="total-collected">0</span>
+                  </div>
+                  <div>Pending Amount: $<span id="total-pending">0</span></div>
+                  <div>Overdue: $<span id="total-overdue">0</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="recent-activity">
+            <h3>Recent Activity</h3>
+            <div id="recent-list" class="activity-list">
+              <!-- Recent activities will be populated here -->
+            </div>
+          </div>
+        </section>
+
+        <!-- Add Rental Section -->
+        <section id="add-rental" class="content-section">
+          <div class="form-container">
+            <h2>Add New Rental</h2>
+            <form id="rental-form">
+              <div class="form-group">
+                <label for="customer-name">Customer Name *</label>
+                <input type="text" id="customer-name" required />
+              </div>
+
+              <div class="form-group">
+                <label for="customer-phone">Phone Number *</label>
+                <input type="tel" id="customer-phone" required />
+              </div>
+
+              <div class="form-group">
+                <label for="customer-address">Address</label>
+                <textarea id="customer-address" rows="3"></textarea>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="equipment-type">Equipment Type *</label>
+                  <select id="equipment-type" required>
+                    <option value="">Select Equipment</option>
+                    <option value="oxygen">Oxygen Concentrator</option>
+                    <option value="bipap">BiPAP</option>
+                    <option value="cpap">CPAP</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label for="equipment-subtype">Subtype *</label>
+                  <select id="equipment-subtype" required>
+                    <option value="">Select Subtype</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="start-date">Start Date *</label>
+                  <input type="date" id="start-date" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="end-date">End Date</label>
+                  <input type="date" id="end-date" />
+                </div>
+              </div>
+
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="rent-amount">Rent Amount ($) *</label>
+                  <input type="number" id="rent-amount" step="0.01" required />
+                </div>
+
+                <div class="form-group">
+                  <label for="collected-amount">Collected Amount ($)</label>
+                  <input
+                    type="number"
+                    id="collected-amount"
+                    step="0.01"
+                    value="0"
+                  />
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="due-date">Due Date</label>
+                <input type="date" id="due-date" />
+              </div>
+
+              <div class="form-group">
+                <label for="notes">Notes</label>
+                <textarea
+                  id="notes"
+                  rows="3"
+                  placeholder="Additional notes about the rental..."
+                ></textarea>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                  <i class="fas fa-save"></i> Add Rental
+                </button>
+                <button type="reset" class="btn-secondary">
+                  <i class="fas fa-undo"></i> Reset
+                </button>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <!-- Manage Rentals Section -->
+        <section id="manage-rentals" class="content-section">
+          <div class="section-header">
+            <h2>Manage Rentals</h2>
+            <div class="filters">
+              <select id="filter-equipment">
+                <option value="">All Equipment</option>
+                <option value="oxygen">Oxygen Concentrator</option>
+                <option value="bipap">BiPAP</option>
+                <option value="cpap">CPAP</option>
+              </select>
+              <select id="filter-status">
+                <option value="">All Status</option>
+                <option value="active">Active</option>
+                <option value="overdue">Overdue</option>
+                <option value="completed">Completed</option>
+              </select>
+              <input
+                type="text"
+                id="search-rentals"
+                placeholder="Search by customer name..."
+              />
+            </div>
+          </div>
+
+          <div class="rentals-table-container">
+            <table id="rentals-table" class="rentals-table">
+              <thead>
+                <tr>
+                  <th>Customer</th>
+                  <th>Equipment</th>
+                  <th>Subtype</th>
+                  <th>Start Date</th>
+                  <th>End Date</th>
+                  <th>Rent Amount</th>
+                  <th>Collected</th>
+                  <th>Pending</th>
+                  <th>Due Date</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="rentals-tbody">
+                <!-- Rental data will be populated here -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports" class="content-section">
+          <div class="reports-grid">
+            <div class="report-card">
+              <h3>Equipment Utilization</h3>
+              <canvas id="utilization-chart"></canvas>
+            </div>
+
+            <div class="report-card">
+              <h3>Revenue Overview</h3>
+              <canvas id="revenue-chart"></canvas>
+            </div>
+
+            <div class="report-card">
+              <h3>Monthly Performance</h3>
+              <div class="monthly-stats">
+                <div class="month-stat">
+                  <label>This Month:</label>
+                  <span id="current-month-revenue">$0</span>
+                </div>
+                <div class="month-stat">
+                  <label>Last Month:</label>
+                  <span id="last-month-revenue">$0</span>
+                </div>
+                <div class="month-stat">
+                  <label>Active Rentals:</label>
+                  <span id="active-rentals-count">0</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="report-card">
+              <h3>Overdue Payments</h3>
+              <div id="overdue-list" class="overdue-payments">
+                <!-- Overdue payments will be listed here -->
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <!-- Modal for editing rentals -->
+      <div id="edit-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Edit Rental</h3>
+            <span class="close">&times;</span>
+          </div>
+          <div class="modal-body">
+            <form id="edit-rental-form">
+              <!-- Form fields will be populated dynamically -->
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal for payment collection -->
+      <div id="payment-modal" class="modal">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3>Collect Payment</h3>
+            <span class="close">&times;</span>
+          </div>
+          <div class="modal-body">
+            <form id="payment-form">
+              <div class="form-group">
+                <label for="payment-amount">Payment Amount ($)</label>
+                <input type="number" id="payment-amount" step="0.01" required />
+              </div>
+              <div class="form-group">
+                <label for="payment-date">Payment Date</label>
+                <input type="date" id="payment-date" required />
+              </div>
+              <div class="form-group">
+                <label for="payment-method">Payment Method</label>
+                <select id="payment-method">
+                  <option value="cash">Cash</option>
+                  <option value="check">Check</option>
+                  <option value="card">Credit/Debit Card</option>
+                  <option value="transfer">Bank Transfer</option>
+                </select>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn-primary">
+                  Record Payment
+                </button>
+                <button type="button" class="btn-secondary close-modal">
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div> <!-- End of main-app -->
+
+    <script src="script.js"></script>
+  </body>
+</html>
