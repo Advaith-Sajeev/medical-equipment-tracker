@@ -1,22 +1,5 @@
 // Medical Equipment Rental Tracker JavaScript
 
-// Authentication Configuration
-// Note: This is a simple hash-based approach for demonstration purposes only
-// For production use, implement proper server-side authentication
-const CREDENTIAL_HASH = "982d9e3eb996f559e633f4d194def3761d909f5a3b647d1a851fead67c32c9d1"; // SHA-256 of "Sajeev:1971"
-
-// Authentication state
-let isAuthenticated = false;
-
-// Simple SHA-256 implementation (for demonstration only - use proper crypto in production)
-async function simpleHash(text) {
-  const encoder = new TextEncoder();
-  const data = encoder.encode(text);
-  const hash = await crypto.subtle.digest('SHA-256', data);
-  const hashArray = Array.from(new Uint8Array(hash));
-  const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
-  return hashHex;
-}
 
 // Equipment subcategories configuration
 const EQUIPMENT_SUBTYPES = {
@@ -50,119 +33,8 @@ let currentPaymentId = null;
 
 // Initialize the application
 document.addEventListener("DOMContentLoaded", function () {
-  checkAuthenticationStatus();
-  setupAuthEventListeners();
-});
-
-function checkAuthenticationStatus() {
-  // Check if user has valid session
-  const authSession = localStorage.getItem("authSession");
-  const sessionExpiry = localStorage.getItem("sessionExpiry");
-  
-  if (authSession && sessionExpiry && Date.now() < parseInt(sessionExpiry)) {
-    isAuthenticated = true;
-    showMainApp();
-  } else {
-    // Clear expired session
-    localStorage.removeItem("authSession");
-    localStorage.removeItem("sessionExpiry");
-    isAuthenticated = false;
-    showLoginPage();
-  }
-}
-
-function setupAuthEventListeners() {
-  // Login form submission
-  const loginForm = document.getElementById("login-form");
-  if (loginForm) {
-    loginForm.addEventListener("submit", handleLogin);
-  }
-
-  // Logout button
-  const logoutBtn = document.getElementById("logout-btn");
-  if (logoutBtn) {
-    logoutBtn.addEventListener("click", handleLogout);
-  }
-}
-
-async function handleLogin(event) {
-  event.preventDefault();
-  
-  const username = document.getElementById("username").value.trim();
-  const password = document.getElementById("password").value;
-  const errorDiv = document.getElementById("login-error");
-  
-  try {
-    // Create credential hash
-    const credentialString = `${username}:${password}`;
-    const inputHash = await simpleHash(credentialString);
-    
-    // Debug logging
-    console.log("Input username:", username);
-    console.log("Input password:", password);
-    console.log("Credential string:", credentialString);
-    console.log("Generated hash:", inputHash);
-    console.log("Expected hash:", CREDENTIAL_HASH);
-    console.log("Hash match:", inputHash === CREDENTIAL_HASH);
-    
-    // Check both hash method and fallback simple check
-    if (inputHash === CREDENTIAL_HASH || (username === "Sajeev" && password === "1971")) {
-      // Successful login
-      const sessionToken = await simpleHash(`${Date.now()}_${Math.random()}`);
-      localStorage.setItem("authSession", sessionToken);
-      localStorage.setItem("sessionExpiry", Date.now() + (24 * 60 * 60 * 1000)); // 24 hours
-      isAuthenticated = true;
-      showMainApp();
-      
-      // Clear form
-      document.getElementById("login-form").reset();
-      errorDiv.style.display = "none";
-    } else {
-      // Failed login
-      showLoginError(errorDiv);
-    }
-  } catch (error) {
-    console.error("Login error:", error);
-    showLoginError(errorDiv);
-  }
-}
-
-function showLoginError(errorDiv) {
-  errorDiv.style.display = "block";
-    
-    // Clear password field
-    document.getElementById("password").value = "";
-    
-    // Focus back on username
-    document.getElementById("username").focus();
-  }
-}
-
-function handleLogout() {
-  // Clear all session data
-  localStorage.removeItem("authSession");
-  localStorage.removeItem("sessionExpiry");
-  isAuthenticated = false;
-  showLoginPage();
-}
-
-function showLoginPage() {
-  document.getElementById("login-container").style.display = "flex";
-  document.getElementById("main-app").style.display = "none";
-  
-  // Focus on username field
-  setTimeout(() => {
-    document.getElementById("username").focus();
-  }, 100);
-}
-
-function showMainApp() {
-  document.getElementById("login-container").style.display = "none";
-  document.getElementById("main-app").style.display = "block";
-  
-  // Initialize the main application
   initializeApp();
-}
+});
 
 function initializeApp() {
   loadDataFromStorage();
