@@ -1,20 +1,6 @@
 # Medical Equipment Rental Tracker
 
-⚠️ **DEMO APPLICATION - NOT FOR PRODUCTION USE**
-
-A comprehensive web-based demonstration application for tracking medical equipment rentals including Oxygen Concentrators, BiPAP, and CPAP units.
-
-## 🚨 Important Security Notice
-
-**This is a demonstration application with client-side only authentication. It is NOT secure for production use with real data.**
-
-- All authentication is handled in the browser (not secure)
-- Credentials can be viewed in source code
-- No server-side validation
-- Not HIPAA compliant
-- Use only with sample/demo data
-
-For security details, see [SECURITY.md](SECURITY.md)
+A comprehensive web-based application for tracking medical equipment rentals including Oxygen Concentrators, BiPAP, and CPAP units.
 
 ## Features
 
@@ -165,79 +151,21 @@ The application uses browser Local Storage to save data. Your rental information
 - Overdue payment alerts
 - Revenue reporting
 
-## 🚀 Deployment
+## Security Note
 
-### GitHub Pages Deployment
+This application stores data locally in your browser. For production use in a business environment, consider implementing:
 
-1. **Push to GitHub**:
-   ```bash
-   git add .
-   git commit -m "Initial commit"
-   git push origin main
-   ```
+- Server-side data storage
+- User authentication
+- Data backup systems
+- Multi-user access controls
 
-2. **Enable GitHub Pages**:
-   - Go to repository Settings
-   - Scroll to "Pages" section
-   - Select source: "Deploy from a branch"
-   - Choose branch: `main`
-   - Choose folder: `/ (root)`
-   - Save
+## Future Enhancements
 
-3. **Access Application**:
-   - Your app will be available at: `https://yourusername.github.io/repository-name`
+Potential improvements for production use:
 
-### Demo Credentials
-- **Username**: `Sajeev`
-- **Password**: `1971`
-
-### Local Development
-
-1. **Clone Repository**:
-   ```bash
-   git clone https://github.com/yourusername/repository-name.git
-   cd repository-name
-   ```
-
-2. **Open in Browser**:
-   - Simply open `index.html` in your web browser
-   - Or use a local server:
-     ```bash
-     python -m http.server 8000
-     # Then visit http://localhost:8000
-     ```
-
-## 🔒 Security Considerations
-
-**CRITICAL**: This application has significant security limitations:
-
-1. **Client-Side Authentication Only**: Easily bypassable
-2. **Visible Credentials**: Source code contains authentication logic
-3. **No Data Encryption**: All data stored in plain text locally
-4. **No Audit Trail**: No logging of access or modifications
-5. **Not HIPAA Compliant**: Cannot be used with real patient data
-
-### Recommended for Production:
-- Implement server-side authentication
-- Use HTTPS everywhere
-- Add proper session management
-- Implement data encryption
-- Add audit logging
-- Use secure credential storage
-
-## 📊 Data Storage
-
-- All data stored in browser's localStorage
-- No external data transmission
-- Data persists until browser cache is cleared
-- Export/import functionality for data backup
-
-## 🛠️ Future Enhancements
-
-For production deployment consider:
-
-- Database integration (PostgreSQL, MongoDB)
-- Server-side authentication (JWT, OAuth)
+- Database integration
+- User authentication system
 - Email notifications for due dates
 - PDF report generation
 - Inventory management
